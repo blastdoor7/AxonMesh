@@ -1,0 +1,181 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\begin{document}
+\begin{center}
+{\LARGE \textbf{AxonMesh: A Self-Adaptive Distributed Ledger and Compute Fabric}} \\[1em]
+{\Large Preliminary Whitepaper} \\[2em]
+
+{\large \texttt{blastdoor7}} \\[1em]
+
+% Optional report info
+Technical Report: AM-2026-001 \\ 
+GitHub Project: \href{https://github.com/blastdoor7/axonmesh}{blastdoor7/axonmesh} \\[1em]
+\today % date
+\end{center}
+
+\begin{abstract}
+We introduce AxonMesh, a distributed system architecture in which global state is not fully replicated across participating nodes, but instead fragmented and adaptively redistributed according to network conditions. In contrast to traditional blockchain systems and fixed-redundancy storage architectures, AxonMesh defines redundancy as a dynamic function of network size, health, and adversarial conditions.
+
+The system exhibits a continuous transition between highly distributed (fragmented) and fully replicated states. Consensus is not achieved via deterministic agreement, but emerges from statistical properties of fragment distribution and reconstructability. AxonMesh further integrates distributed computation as a first-class primitive, enabling a unified substrate for storage, validation, and large-scale compute workloads.
+\end{abstract}
+
+\section{Introduction}
+
+Distributed systems typically adopt one of two approaches to data durability:
+
+\begin{itemize}
+\item Full replication (e.g., classical blockchain systems)
+\item Fixed redundancy (e.g., erasure-coded storage systems)
+\end{itemize}
+
+Both approaches assume a static redundancy model independent of network dynamics. Under node churn, failure, or adversarial conditions, these systems attempt to restore a predefined configuration.
+
+AxonMesh departs from this paradigm by introducing \textbf{adaptive redundancy}, in which the distribution of information evolves continuously with the effective network size and conditions.
+
+The central hypothesis is that a distributed system can maintain global state integrity through probabilistic reconstructability rather than deterministic replication.
+
+\section{System Model}
+
+Let the network be defined as a set of nodes:
+
+\[
+\mathcal{N} = {N_0, N_1, \dots, N_k}
+\]
+
+Each node $N_i$ stores a subset of the global state $S_{total}$:
+
+\[
+S_i \subset S_{total}
+\]
+
+\subsection{Reconstruction Property}
+
+The system maintains a probabilistic reconstruction guarantee:
+
+\[
+P(\text{reconstruct}(S_{total} \mid \bigcup_i S_i)) \geq \tau
+\]
+
+where $\tau$ is a system-defined threshold.
+
+\section{Information Density and Adaptation}
+
+Define the information density at node $N_i$ as:
+
+\[
+D_i = \frac{|S_i|}{|S_{total}|}
+\]
+
+We introduce a target density function:
+
+\[
+D_{target} = f(N_{eff}, H, A)
+\]
+
+where:
+\begin{itemize}
+\item $N_{eff}$: effective number of active nodes
+\item $H$: network health
+\item $A$: adversarial estimate
+\end{itemize}
+
+\subsection{Asymptotic Behavior}
+
+As $N_{eff} \to \infty$:
+
+\[
+D_i \to 0
+\]
+
+As $N_{eff} \to 1$:
+
+\[
+D_i \to 1
+\]
+
+Thus, the system transitions continuously between centralized and distributed regimes.
+
+\section{Adaptive Placement}
+
+AxonMesh employs deterministic placement inspired by CRUSH-like mapping:
+
+\[
+\texttt{object\_id} \rightarrow \texttt{candidate\ nodes}
+\]
+
+Placement is modified by an adaptive overlap mechanism:
+\begin{itemize}
+\item Fragment overlap is probabilistic
+\item Overlap increases as redundancy requirements increase
+\end{itemize}
+
+\section{Encoding Regimes}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Network Size & Encoding Behavior \\
+\midrule
+Large & High fragmentation, minimal overlap \\
+Medium & Hybrid encoding and partial duplication \\
+Small & High overlap, redundancy-dominated \\
+Very small & Full replication \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Statistical Consensus}
+
+Consensus in AxonMesh is based on statistical validation criteria. A transaction is accepted if:
+
+\[
+P(\text{valid} \mid \text{observed\ fragments}) \geq \theta
+\]
+
+\section{Failure and Adversarial Model}
+
+AxonMesh assumes node failures, network partitions, and Byzantine actors. Instead of restoring a predefined configuration, the system transitions to a new equilibrium characterized by increased redundancy and overlap.
+
+\section{Compute Layer Integration}
+
+Nodes may execute distributed workloads, participate in machine learning training, and perform validation computations. Computation contributes directly to validation.
+
+\section{Dynamic Equilibrium Model}
+
+The system evolves according to:
+
+\[
+\begin{aligned}
+& { N_0 : \text{full state} } \
+& \rightarrow { N_0, \dots, N_k : \text{partial state} } \
+& \rightarrow { N_i : \text{increasing density} } \
+& \rightarrow { N_j : \text{full state} }
+\end{aligned}
+\]
+
+\section{Comparison with Existing Systems}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Property & Blockchain & Fixed Storage & AxonMesh \\
+\midrule
+Redundancy & Full & Fixed & Adaptive \\
+Consensus & Deterministic & None & Statistical \\
+Placement & Global & Deterministic & Adaptive deterministic \\
+Failure Response & Recover & Rebalance & Reconfigure \\
+Compute & Limited & None & Native \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Conclusion}
+
+AxonMesh introduces a distributed systems model in which redundancy, consensus, and structure are dynamic rather than fixed. By replacing deterministic guarantees with probabilistic reconstructability and adaptive encoding, the system enables a resilient and flexible alternative to existing architectures.
+
+\end{document}

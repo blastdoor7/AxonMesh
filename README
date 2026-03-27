@@ -1,0 +1,21 @@
+# AxonMesh
+
+**AxonMesh** is a self-adaptive distributed ledger and compute fabric. Unlike traditional blockchain systems, AxonMesh fragments the global state across participating nodes and dynamically adjusts redundancy and replication according to network conditions. It also integrates distributed computation, providing a unified platform for storage, validation, and grid-like compute workloads.
+
+## Whitepaper
+
+A preliminary whitepaper is available in the `docs` folder:
+
+- [PDF Version](docs/whitepaper.pdf) – ready to read.  
+- [LaTeX Source](docs/whitepaper.tex) – for editing or compilation.
+
+## Key Features
+
+- **Adaptive Redundancy:** Probabilistic reconstruction rather than full replication.  
+- **Statistical Consensus:** Transactions are validated based on observed fragment distributions.  
+- **Integrated Compute Layer:** Nodes can execute distributed workloads, including machine learning or scientific computations.  
+- **Dynamic Equilibrium:** The system seamlessly transitions between fragmented and fully replicated states under node churn or adversarial conditions.
+
+## License
+
+This project is released under the [MIT License](LICENSE). See the `LICENSE` file for details.
